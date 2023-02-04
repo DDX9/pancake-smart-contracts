@@ -2,44 +2,39 @@
   {
     "inputs": [
       {
+        "internalType": "contract IERC20",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IERC20",
+        "name": "_receiptToken",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IMasterChef",
+        "name": "_masterchef",
+        "type": "address"
+      },
+      {
         "internalType": "address",
-        "name": "_pancakeSquad",
+        "name": "_admin",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_treasury",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "_maxReserveSupply",
+        "name": "_startBlock",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_pricePerTicket",
+        "name": "_endBlock",
         "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_cakeToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_pancakeProfile",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_operator",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_vrfCoordinator",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_linkToken",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -49,45 +44,31 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "users",
-        "type": "address[]"
-      }
-    ],
-    "name": "AddressesUnwhitelisted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "users",
-        "type": "address[]"
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
       },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "numberTickets",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "AddressesWhitelisted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
       {
         "indexed": false,
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "lastDepositedTime",
+        "type": "uint256"
       }
     ],
-    "name": "Claim",
+    "name": "Deposit",
     "type": "event"
   },
   {
@@ -96,68 +77,23 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "sender",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "numberTokens",
-        "type": "uint256"
-      }
-    ],
-    "name": "Mint",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "NewOperator",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "pricePerTicket",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewPricePerTicket",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTimestamp",
+        "name": "performanceFee",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "maxPerAddress",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "maxPerTransaction",
+        "name": "callFee",
         "type": "uint256"
       }
     ],
-    "name": "NewSaleProperties",
+    "name": "Harvest",
     "type": "event"
   },
   {
@@ -181,21 +117,8 @@
   },
   {
     "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "latestRequestId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "enum NFTSale.Status",
-        "name": "currentStatus",
-        "type": "uint8"
-      }
-    ],
-    "name": "RandomnessRequest",
+    "inputs": [],
+    "name": "Pause",
     "type": "event"
   },
   {
@@ -203,12 +126,63 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "enum NFTSale.Status",
-        "name": "newStatus",
-        "type": "uint8"
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
       }
     ],
-    "name": "SaleStatusUpdate",
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "Unpause",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateEndBlock",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startBlock",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateStartAndEndBlocks",
     "type": "event"
   },
   {
@@ -217,17 +191,41 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "sender",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "numberTickets",
+        "name": "lastAvgBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "lastActionBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "lastValidActionBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "lastActionBlock",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "lastValidActionBlock",
         "type": "uint256"
       }
     ],
-    "name": "TicketsDistributed",
+    "name": "UpdateUserIFO",
     "type": "event"
   },
   {
@@ -236,7 +234,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "token",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -244,45 +242,161 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
       }
     ],
-    "name": "TokenRecovery",
+    "name": "Withdraw",
     "type": "event"
   },
   {
+    "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
-        "name": "_numberTickets",
+        "name": "currentBlock",
         "type": "uint256"
       }
     ],
-    "name": "buyTickets",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "name": "ZeroFreeIFO",
+    "type": "event"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "MAX_CALL_FEE",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "_numberTickets",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "buyTicketsInPreSaleForGen0",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "cakeToken",
+    "name": "MAX_PERFORMANCE_FEE",
     "outputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_WITHDRAW_FEE",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_WITHDRAW_FEE_PERIOD",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "available",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "balanceOf",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "calculateHarvestCakeRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "calculateTotalPendingCakeRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "callFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -292,11 +406,45 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_ticketId",
+        "name": "_amount",
         "type": "uint256"
       }
     ],
-    "name": "calculateTokenId",
+    "name": "deposit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "emergencyWithdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "emergencyWithdrawAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "endBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPricePerFullShare",
     "outputs": [
       {
         "internalType": "uint256",
@@ -311,127 +459,15 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "user",
+        "name": "_user",
         "type": "address"
       }
     ],
-    "name": "canClaimForGen0",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "changeOwnershipPancakeSquad",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "claim",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "currentStatus",
-    "outputs": [
-      {
-        "internalType": "enum NFTSale.Status",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "drawRandomness",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "fee",
+    "name": "getUserCredit",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_numberTickets",
-        "type": "uint256"
-      }
-    ],
-    "name": "getReserveTickets",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "keyHash",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "latestRequestId",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "lock",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maxPerAddress",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
+        "name": "avgBalance",
         "type": "uint256"
       }
     ],
@@ -440,52 +476,7 @@
   },
   {
     "inputs": [],
-    "name": "maxPerTransaction",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maxReserveSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maxSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "_ticketIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "mint",
+    "name": "harvest",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -494,30 +485,18 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "_token",
         "type": "address"
       }
     ],
-    "name": "numberTicketsForGen0",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "inCaseTokensGetStuck",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "numberTicketsUsedForGen0",
+    "inputs": [],
+    "name": "lastHarvestedTime",
     "outputs": [
       {
         "internalType": "uint256",
@@ -530,10 +509,10 @@
   },
   {
     "inputs": [],
-    "name": "operator",
+    "name": "masterchef",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IMasterChef",
         "name": "",
         "type": "address"
       }
@@ -556,85 +535,48 @@
   },
   {
     "inputs": [],
-    "name": "pancakeProfile",
-    "outputs": [
-      {
-        "internalType": "contract IPancakeProfile",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pancakeSquad",
-    "outputs": [
-      {
-        "internalType": "contract PancakeSquad",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pricePerTicket",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "randomOffsetNumber",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "requestId",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "randomness",
-        "type": "uint256"
-      }
-    ],
-    "name": "rawFulfillRandomness",
+    "name": "pause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "_token",
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "performanceFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "receiptToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "recoverToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -647,12 +589,12 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "_uri",
-        "type": "string"
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
       }
     ],
-    "name": "setBaseURI",
+    "name": "setAdmin",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -661,16 +603,24 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_fee",
+        "name": "_callFee",
         "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_keyHash",
-        "type": "bytes32"
       }
     ],
-    "name": "setFeeAndKeyHash",
+    "name": "setCallFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_performanceFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPerformanceFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -679,11 +629,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_operator",
+        "name": "_treasury",
         "type": "address"
       }
     ],
-    "name": "setOperatorAddress",
+    "name": "setTreasury",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -692,21 +642,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_startTimestamp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_maxPerAddress",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_maxPerTransaction",
+        "name": "_withdrawFee",
         "type": "uint256"
       }
     ],
-    "name": "setSaleProperties",
+    "name": "setWithdrawFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -715,18 +655,18 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_pricePerTicket",
+        "name": "_withdrawFeePeriod",
         "type": "uint256"
       }
     ],
-    "name": "setTicketPrice",
+    "name": "setWithdrawFeePeriod",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "startTimestamp",
+    "name": "startBlock",
     "outputs": [
       {
         "internalType": "uint256",
@@ -738,34 +678,13 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "cursor",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "size",
-        "type": "uint256"
-      }
-    ],
-    "name": "ticketsOfUserBySize",
+    "inputs": [],
+    "name": "token",
     "outputs": [
       {
-        "internalType": "uint256[]",
+        "internalType": "contract IERC20",
         "name": "",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -773,7 +692,7 @@
   },
   {
     "inputs": [],
-    "name": "totalTicketsDistributed",
+    "name": "totalShares",
     "outputs": [
       {
         "internalType": "uint256",
@@ -798,14 +717,21 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "treasury",
+    "outputs": [
       {
-        "internalType": "address[]",
-        "name": "_users",
-        "type": "address[]"
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
-    "name": "unwhitelistAddresses",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -813,12 +739,30 @@
   {
     "inputs": [
       {
-        "internalType": "enum NFTSale.Status",
-        "name": "_status",
-        "type": "uint8"
+        "internalType": "uint256",
+        "name": "_endBlock",
+        "type": "uint256"
       }
     ],
-    "name": "updateSaleStatus",
+    "name": "updateEndBlock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_startBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_endBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateStartAndEndBlocks",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -827,11 +771,98 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "user",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "viewNumberTicketsOfUser",
+    "name": "userIFOInfo",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "lastActionBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastValidActionBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastActionBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastValidActionBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastAvgBalance",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "userInfo",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastDepositedTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "cakeAtLastUserAction",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastUserActionTime",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_shares",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawFee",
     "outputs": [
       {
         "internalType": "uint256",
@@ -843,21 +874,16 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "withdrawFeePeriod",
+    "outputs": [
       {
-        "internalType": "address[]",
-        "name": "_users",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_numberTickets",
-        "type": "uint256[]"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "whitelistAddresses",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   }
 ]

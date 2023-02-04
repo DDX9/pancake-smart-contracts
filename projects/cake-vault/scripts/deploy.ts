@@ -43,24 +43,28 @@ const main = async () => {
     const SyrupContract = await ethers.getContractFactory("SyrupBar");
     const MasterChefContract = await ethers.getContractFactory("MasterChef");
     const currentBlock = await ethers.provider.getBlockNumber();
-
+    const [deployer] = await ethers.getSigners();
     if (name === "hardhat") {
-      const [deployer] = await ethers.getSigners();
+      
       admin = deployer.address;
       treasury = deployer.address;
     } else {
       admin = config.Admin[name];
       treasury = config.Treasury[name];
     }
-
-    cake = (await CakeContract.deploy()).address;
-    await cake.deployed();
+    const cakeContract = await CakeContract.deploy()
+    console.log(`deployed cakeContract ${cakeContract.address}`)
+    cakeContract.mint(deployer.address,"1000000000000000000000000")
+    console.log('cakeContract mint')
+    cake = cakeContract.address;
+    // await cake.deployed();
     syrup = (await SyrupContract.deploy(cake)).address;
-    await syrup.deployed();
+    console.log(`deployed syrup ${syrup}`)
+    // await syrup.deployed();
     masterchef = (await MasterChefContract.deploy(cake, syrup, admin, ethers.BigNumber.from("1"), currentBlock))
       .address;
-
-    await masterchef.deployed();
+    console.log(`deployed masterchef ${masterchef}`)
+    // await masterchef.deployed();
 
     console.log("Admin:", admin);
     console.log("Treasury:", treasury);
